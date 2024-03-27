@@ -17,8 +17,8 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
       - name: Build
-        run: dotnet build --configuration Release /p:Version=${{ github.ref_name[1:] }}
+        run: dotnet build --configuration Release /p:Version=${{  substr(github.ref_name, 1, length(github.ref_name)-1) }} 
       - name: Pack
-        run: dotnet pack --configuration Release /p:Version=${{ github.ref_name[1:] }}
+        run: dotnet pack --configuration Release /p:Version=${{  substr(github.ref_name, 1, length(github.ref_name)-1) }} 
       - name: Publish to NuGet
         run: dotnet nuget push *.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json 
