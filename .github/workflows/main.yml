@@ -1,0 +1,24 @@
+name: Publish NuGet Package
+
+on:
+  push:
+    tags:
+      - 'v*'  # Publish on creating a new tag starting with 'v'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x  # Update version as needed
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release /p:Version=${GITHUB_REF#refs/tags/} 
+      - name: Pack
+        run: dotnet pack --configuration Release /p:Version=${GITHUB_REF#refs/tags/}
+      - name: Publish to NuGet
+        run: dotnet nuget push *.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json 
