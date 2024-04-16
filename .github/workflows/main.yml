@@ -13,7 +13,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 6.0.x  # Update version as needed
+          dotnet-version: 8.0.x  # Update version as needed
       - name: Restore dependencies
         run: dotnet restore
       - name: Build
@@ -25,4 +25,6 @@ jobs:
           VERSION=$(echo ${{ github.ref_name }} | cut -c2-)
           dotnet pack --configuration Release /p:Version=$VERSION
       - name: Publish to NuGet
-        run: dotnet nuget push /home/runner/work/MarvelApiClient/MarvelApiClient/MarvelApiClient/bin/Release/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json 
+        run: |
+          dotnet nuget push /home/runner/work/MarvelApiClient/MarvelApiClient/MarvelApiClient/bin/Release/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json 
+          dotnet nuget push /home/runner/work/MarvelApiClient/MarvelApiClient/MarvelApiClient.DependencyInjection/bin/Release/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json 
