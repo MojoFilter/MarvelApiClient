@@ -1,40 +1,17 @@
 ﻿using RestSharp;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace MarvelApiClient;
-
-public enum ReleaseDateDescriptor
-{
-    lastWeek,
-    thisWeek,
-    NextWeek,
-    ThisMonth
-}
-
-public record ImageLocation(string Path, string Extension);
-
-public record Comic(int Id, string Title, double IssueNumber, string Description, ImageLocation Thumbnail)
-{
-    public Uri ThumbnailUri => new($"{Thumbnail.Path}.{Thumbnail.Extension}");
-}
-
-public record ApiKey(string Value);
-public record PrivateKey(string Value);
-
-public interface IMarvelApiClient
-{
-    Task<IEnumerable<Comic>> GetReleasesAsync(ReleaseDateDescriptor timeFrame, CancellationToken cancellationToken = default);
-}
-
 
 internal sealed class MarvelRestClient(Uri apiUri, ApiKey apiKey, PrivateKey privateKey) : IMarvelApiClient
 {
     public async Task<IEnumerable<Comic>> GetReleasesAsync(ReleaseDateDescriptor timeFrame, CancellationToken cancellationToken = default)
     {
-        var resource = $"v1/public/comics?dateDescriptor={timeFrame}";
+        var resource = $"v1/public/comics?format=comic&noVariants=true&dateDescriptor={timeFrame}";
         var wrapper = await GetAsync<ComicWrapper>(resource, cancellationToken).ConfigureAwait(false);
-        return wrapper.Data.Results;
+        return wrapper.Data.Results.Select(Map).ToList();
     }
 
     private async Task<T> GetAsync<T>(string resource, CancellationToken cancellationToken)
@@ -58,12 +35,28 @@ internal sealed class MarvelRestClient(Uri apiUri, ApiKey apiKey, PrivateKey pri
             return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
         }
     }
-        
+
+    private Comic Map(ComicInfo info)
+    {
+        var title = this.StripTitleDates(info.Title);
+        return new Comic(
+            info.Id,
+            title,
+            info.IssueNumber,
+            info.Description,
+            new($"{info.Thumbnail.Path}.{info.Thumbnail.Extension}"));
+    }
+
+    private string StripTitleDates(string title) {
+        var match = Regex.Match(title, @"(?<title>.+)(?<date> (\([0-9]{4}.*))(?<number> #.+)");
+        return match.Success ? match.Groups["title"].Value : title;
+    }
 
     private readonly ApiKey _apiKey = apiKey;
     private readonly PrivateKey _privateKey = privateKey;
     private readonly Uri _uri = apiUri;
 
-    record ComicContainer(Comic[] Results);
+    record ComicInfo(int Id, string Title, double IssueNumber, string Description, ImageLocation Thumbnail);
+    record ComicContainer(ComicInfo[] Results);
     record ComicWrapper(ComicContainer Data);
 }

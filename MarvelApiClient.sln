@@ -5,6 +5,10 @@ VisualStudioVersion = 17.9.34321.82
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarvelApiClient", "MarvelApiClient\MarvelApiClient.csproj", "{631A67AE-A64F-49F8-BD0F-796D121DFA7C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarvelApiClientSample", "MarvelApiClientSample\MarvelApiClientSample.csproj", "{32601BD0-EE5E-4A57-823B-C8F517B403A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarvelApiClient.DependencyInjection", "MarvelApiClient.DependencyInjection\MarvelApiClient.DependencyInjection.csproj", "{63183479-74FE-4F13-ACBE-DF049A799D91}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{631A67AE-A64F-49F8-BD0F-796D121DFA7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{631A67AE-A64F-49F8-BD0F-796D121DFA7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{631A67AE-A64F-49F8-BD0F-796D121DFA7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32601BD0-EE5E-4A57-823B-C8F517B403A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32601BD0-EE5E-4A57-823B-C8F517B403A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32601BD0-EE5E-4A57-823B-C8F517B403A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32601BD0-EE5E-4A57-823B-C8F517B403A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63183479-74FE-4F13-ACBE-DF049A799D91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63183479-74FE-4F13-ACBE-DF049A799D91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63183479-74FE-4F13-ACBE-DF049A799D91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63183479-74FE-4F13-ACBE-DF049A799D91}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
